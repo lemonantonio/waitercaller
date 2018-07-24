@@ -14,12 +14,13 @@ class DBHelper:
     def __init__(self):
         client = pymongo.MongoClient()
         self.db = client[DATABASE]
+
     # users
     def get_user(self, email):
         return self.db.users.find_one({"email": email})
 
     def add_user(self, email, salt, hashed):
-        self.db.users.insert({"email": email, "salt":salt, "hashed": hashed})
+        self.db.users.insert({"email": email, "salt": salt, "hashed": hashed})
 
     # tables
     def add_table(self, number, owner):
@@ -33,7 +34,7 @@ class DBHelper:
         return list(self.db.tables.find({"owner": owner_id}))
 
     def get_table(self, table_id):
-        return self.db.tables.find_one({"_id", ObjectId(table_id)})
+        return self.db.tables.find_one({"_id": ObjectId(table_id)})
 
     def delete_table(self, table_id):
         self.db.tables.remove({"_id": ObjectId(table_id)})
@@ -42,7 +43,7 @@ class DBHelper:
     def add_request(self, table_id, time):
         table = self.get_table(table_id)
         self.db.requests.insert({"owner": table["owner"], "table_number": table["number"],
-                                 "table_id": ObjectId(table_id), "time": time})
+                                 "table_id": table_id, "time": time})
 
     def get_requests(self, owner_id):
         return list(self.db.requests.find({"owner": owner_id}))
