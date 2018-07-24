@@ -101,8 +101,8 @@ def account_createtable():
 
     form = CreateTableForm(request.form)
     if form .validate():
-        tableid = str(DB.add_table(form.tablenumber.data, current_user.get_id()))
-        new_url = BH.shorten_url(config.base_url + "newrequest/" + tableid)
+        tableid = DB.add_table(form.tablenumber.data, current_user.get_id())
+        new_url = BH.shorten_url(config.base_url + "newrequest/" + str(tableid))
         DB.update_table(tableid, new_url)
     return render_template("account.html", createtableform=form, tables=DB.get_tables(current_user.get_id()))
 
